@@ -1,7 +1,6 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { useState } from "react";
 import { buttonVariants, buttonTransition } from "@/lib/animations";
 
 interface ButtonProps {
@@ -15,12 +14,6 @@ interface ButtonProps {
   className?: string;
 }
 
-interface Ripple {
-  x: number;
-  y: number;
-  id: number;
-}
-
 export function Button({
   variant = "primary",
   size = "md",
@@ -31,16 +24,16 @@ export function Button({
   onClick,
   className = ""
 }: ButtonProps) {
-  const [ripples, setRipples] = useState<Ripple[]>([]);
   const shouldReduceMotion = useReducedMotion();
 
   const baseStyles =
-    "inline-flex items-center justify-center font-sans font-medium rounded-full transition-colors duration-200 relative overflow-hidden";
+    "inline-flex items-center justify-center font-sans font-medium rounded-full transition-[background-color,color,border-color,box-shadow] duration-200";
 
   const variants = {
-    primary: "bg-primary text-white hover:bg-primary-hover",
-    secondary: "bg-teal text-white hover:bg-teal/90",
-    outline: "border-2 border-teal text-teal hover:bg-teal hover:text-white"
+    primary: "bg-ink text-background hover:bg-ink-hover",
+    secondary:
+      "bg-surface backdrop-blur-md border border-glass-border shadow-glass text-foreground hover:shadow-glass-hover",
+    outline: "border border-glass-ring text-muted hover:text-foreground hover:border-faint"
   };
 
   const sizes = {
@@ -50,34 +43,6 @@ export function Button({
   };
 
   const classes = `${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`;
-
-  const handleRipple = (e: React.MouseEvent<HTMLElement>) => {
-    if (shouldReduceMotion) return;
-
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const id = Date.now();
-
-    setRipples(prev => [...prev, { x, y, id }]);
-    setTimeout(() => setRipples(prev => prev.filter(r => r.id !== id)), 600);
-  };
-
-  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
-    handleRipple(e);
-    onClick?.();
-  };
-
-  const rippleElements = ripples.map(ripple => (
-    <motion.span
-      key={ripple.id}
-      className="absolute rounded-full bg-white/30 pointer-events-none"
-      style={{ left: ripple.x, top: ripple.y }}
-      initial={{ width: 0, height: 0, x: 0, y: 0, opacity: 0.5 }}
-      animate={{ width: 300, height: 300, x: -150, y: -150, opacity: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-    />
-  ));
 
   if (shouldReduceMotion) {
     if (href) {
@@ -106,17 +71,15 @@ export function Button({
         whileHover="hover"
         whileTap="tap"
         transition={buttonTransition}
-        onClick={handleRipple}
       >
         {children}
-        {rippleElements}
       </motion.a>
     );
   }
 
   return (
     <motion.button
-      onClick={handleClick}
+      onClick={onClick}
       className={classes}
       variants={buttonVariants}
       initial="initial"
@@ -125,7 +88,6 @@ export function Button({
       transition={buttonTransition}
     >
       {children}
-      {rippleElements}
     </motion.button>
   );
 }

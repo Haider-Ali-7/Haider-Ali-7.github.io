@@ -2,7 +2,7 @@
 
 import { FeatureCard } from '@/components/ui/FeatureCard';
 import { ProjectModal, type Project } from '@/components/ui/ProjectModal';
-import { DURATIONS, EASINGS } from '@/lib/animations';
+import { DURATIONS, EASINGS, fadeInUp } from '@/lib/animations';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useState } from 'react';
 
@@ -190,31 +190,22 @@ const cardVariants = {
   }
 };
 
-const headerVariants = {
-  initial: { opacity: 0, y: 20 },
-  animate: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: DURATIONS.entrance, ease: EASINGS.entrance }
-  }
-};
-
 export function Projects() {
   const shouldReduceMotion = useReducedMotion();
   const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
 
   return (
-    <section id="projects" className="py-20 bg-teal">
+    <section id="projects" className="py-24 sm:py-28 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           className="text-center mb-12"
-          variants={shouldReduceMotion ? {} : headerVariants}
+          variants={shouldReduceMotion ? {} : fadeInUp}
           initial="initial"
           whileInView="animate"
-          viewport={{ once: false, margin: '-50px' }}>
-          <p className="text-xs tracking-[0.3em] uppercase text-white/50 mb-3">Featured Work</p>
-          <h2 className="font-gothic text-6xl sm:text-8xl uppercase tracking-wider text-white mb-3">Projects</h2>
-          <p className="text-xs tracking-[0.25em] uppercase text-white/60">Code &mdash; Create &mdash; Conquer</p>
+          viewport={{ once: true, margin: '-50px' }}>
+          <p className="eyebrow mb-3">Featured Work</p>
+          <h2 className="text-4xl sm:text-5xl font-light tracking-tight text-foreground mb-3">Projects</h2>
+          <p className="eyebrow">Code &mdash; Create &mdash; Conquer</p>
         </motion.div>
 
         <motion.div
@@ -222,7 +213,7 @@ export function Projects() {
           variants={shouldReduceMotion ? {} : containerVariants}
           initial="initial"
           whileInView="animate"
-          viewport={{ once: false, margin: '-100px' }}>
+          viewport={{ once: true, margin: '-100px' }}>
           {projects.map((project, index) => (
             <motion.div key={`${project.title}-${index}`} variants={shouldReduceMotion ? {} : cardVariants}>
               <FeatureCard

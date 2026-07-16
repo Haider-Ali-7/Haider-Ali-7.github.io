@@ -57,15 +57,15 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
           initial="initial"
           animate="animate"
           exit="exit">
-          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
+          <div className="absolute inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm" onClick={onClose} />
 
           <motion.div
-            className="relative bg-coffee-bean rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl"
+            className="relative bg-surface-strong backdrop-blur-xl border border-glass-border rounded-card max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-glass"
             variants={shouldReduceMotion ? {} : modalContentVariants}
             onClick={e => e.stopPropagation()}>
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+              className="absolute top-4 right-4 z-10 p-2 rounded-full bg-foreground/10 text-foreground hover:bg-foreground/20 transition-colors"
               aria-label="Close modal">
               <IoClose size={24} />
             </button>
@@ -73,7 +73,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
             <div className="overflow-y-auto max-h-[90vh]">
               {project.images && project.images.length > 0 ? (
                 <div className="relative">
-                  <div className="relative aspect-[16/10] bg-teal">
+                  <div className="relative aspect-[16/10] bg-background">
                     <Image
                       src={project.images[selectedImageIndex]}
                       alt={`${project.title} screenshot ${selectedImageIndex + 1}`}
@@ -87,7 +87,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                           key={idx}
                           onClick={() => setSelectedImageIndex(idx)}
                           className={`w-2 h-2 rounded-full transition-colors ${
-                            idx === selectedImageIndex ? 'bg-white' : 'bg-white/40'
+                            idx === selectedImageIndex ? 'bg-foreground' : 'bg-foreground/30'
                           }`}
                           aria-label={`Go to image ${idx + 1}`}
                         />
@@ -99,13 +99,13 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                     <>
                       <button
                         onClick={() => setSelectedImageIndex(i => (i > 0 ? i - 1 : project.images!.length - 1))}
-                        className="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+                        className="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-foreground/10 text-foreground hover:bg-foreground/20 transition-colors"
                         aria-label="Previous image">
                         <IoChevronBack size={24} />
                       </button>
                       <button
                         onClick={() => setSelectedImageIndex(i => (i < project.images!.length - 1 ? i + 1 : 0))}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-foreground/10 text-foreground hover:bg-foreground/20 transition-colors"
                         aria-label="Next image">
                         <IoChevronForward size={24} />
                       </button>
@@ -114,7 +114,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
 
                   {project.images.length > 1 && (
                     <motion.div
-                      className="flex gap-2 p-4 overflow-x-auto bg-teal/30"
+                      className="flex gap-2 p-4 overflow-x-auto bg-foreground/5"
                       variants={shouldReduceMotion ? {} : imageGalleryVariants}
                       initial="initial"
                       animate="animate">
@@ -124,7 +124,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                           variants={shouldReduceMotion ? {} : imageItemVariants}
                           onClick={() => setSelectedImageIndex(idx)}
                           className={`relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-colors ${
-                            idx === selectedImageIndex ? 'border-coral' : 'border-transparent'
+                            idx === selectedImageIndex ? 'border-accent' : 'border-transparent'
                           }`}>
                           <Image
                             src={img}
@@ -139,8 +139,8 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                   )}
                 </div>
               ) : (
-                <div className="aspect-[16/10] bg-gradient-to-br from-coral/20 to-teal/20 flex items-center justify-center">
-                  <span className="text-6xl font-display text-white/20">
+                <div className="aspect-[16/10] bg-gradient-to-br from-accent-soft to-rose-soft flex items-center justify-center">
+                  <span className="text-6xl font-light text-foreground/10">
                     {project.title
                       .split(' ')
                       .map(w => w[0])
@@ -151,8 +151,8 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
               )}
 
               <div className="p-6">
-                <h2 className="font-display text-2xl text-tan mb-4">{project.title}</h2>
-                <p className="font-sans text-tan/80 leading-relaxed whitespace-pre-line">{project.description}</p>
+                <h2 className="text-2xl font-medium text-foreground mb-4">{project.title}</h2>
+                <p className="text-muted leading-relaxed whitespace-pre-line">{project.description}</p>
               </div>
             </div>
           </motion.div>
